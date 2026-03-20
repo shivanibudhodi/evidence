@@ -37,6 +37,7 @@ jobs:
           JF_URL: ${{ secrets.JF_URL }}
         with:
           oidc-provider-name: 'demo-git-intergation'
+          oidc-audience: 'jfrog-github'  # Explicitly matches the JFrog OIDC config
       
       - name: Log in to JFrog Docker Registry
         uses: docker/login-action@v3
@@ -51,13 +52,13 @@ jobs:
         with:
           context: .
           push: true
-          # Generates: hts2-ap-docker.jfrog.io/my-image:12
+          # Generates e.g., hts2-ap-docker.jfrog.io/my-image:12
           tags: ${{ env.JF_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
 
       - name: Attest Docker Image and Send to JFrog Evidence
         uses: actions/attest-build-provenance@v3
         with:
-          # Standard Docker registry path without the oci:// prefix
+          # Standard Docker registry path
           subject-name: ${{ env.JF_REGISTRY }}/${{ env.IMAGE_NAME }}
           
           # Links the attestation to the exact image digest generated in the build step
