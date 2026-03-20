@@ -58,8 +58,8 @@ jobs:
       - name: Attest Docker Image and Send to JFrog Evidence
         uses: actions/attest-build-provenance@v3
         with:
-          # Provide the exact Artifactory repository path instead of the Docker URL
-          subject-name: vigneshs-docker-local/${{ env.IMAGE_NAME }}
+          # The 'oci://' prefix is explicitly REQUIRED by JFrog to trigger its Docker logic!
+          subject-name: oci://${{ env.JF_REGISTRY }}/${{ env.IMAGE_NAME }}
           
           # Links the attestation to the exact image digest generated in the build step
           subject-digest: ${{ steps.build-and-push.outputs.digest }}
