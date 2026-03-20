@@ -52,8 +52,11 @@ jobs:
         with:
           context: .
           push: true
-          # Generates e.g., hts2-ap-docker.jfrog.io/my-image:12
-          tags: ${{ env.JF_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
+          # Note: If you want both the 'latest' tag AND the run number tag, 
+          # you must provide the full path for BOTH on separate lines:
+          tags: |
+            ${{ env.JF_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.JF_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
 
       - name: Attest Docker Image and Send to JFrog Evidence
         uses: actions/attest-build-provenance@v3
